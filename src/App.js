@@ -1,20 +1,21 @@
 import "./App.css";
 import axios from "axios";
-import md5 from "md5";
 import { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import ProductsList from "./components/ProductsList";
+import ProductsList from "./components/productsList";
+import { auth } from "./utils/auth";
+
+export const url = "http://api.valantis.store:40000/";
+
 function App() {
   const [ids, setIds] = useState([]);
 
-  const url = "http://api.valantis.store:40000/";
-
-  const currentDate = new Date();
-  const year = currentDate.getFullYear();
-  const month = String(currentDate.getMonth() + 1).padStart(2, "0");
-  const day = String(currentDate.getDate()).padStart(2, "0");
-  const formattedDate = `${year}${month}${day}`;
-  const authToken = md5(`Valantis_${formattedDate}`);
+  // const currentDate = new Date();
+  // const year = currentDate.getFullYear();
+  // const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+  // const day = String(currentDate.getDate()).padStart(2, "0");
+  // const formattedDate = `${year}${month}${day}`;
+  // const authToken = md5(`Valantis_${formattedDate}`);
 
   useEffect(() => {
     axios
@@ -27,7 +28,7 @@ function App() {
         },
         {
           headers: {
-            "X-Auth": authToken,
+            "X-Auth": auth(),
           },
         }
       )
@@ -42,7 +43,9 @@ function App() {
 
   console.log(ids);
 
-  return <ProductsList ids={ids} />;
+  return <>{ids ? <ProductsList ids={ids} /> : "loading"}</>;
+
+  // {ids?<ProductsList ids={ids} />:"loading"}
 }
 
 export default App;
