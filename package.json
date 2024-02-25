@@ -1,6 +1,7 @@
 {
   "name": "valansis",
   "version": "0.1.0",
+  "homepage": "https://djbobah.github.io/valansis/",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
