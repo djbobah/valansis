@@ -1,4 +1,4 @@
-const Filter = ({ filter, onChange, onSubmit }) => {
+const Filter = ({ filter, onChange, onSubmit, onCancel }) => {
   return (
     <>
       <div className="container mt-3 mb-3">
@@ -53,6 +53,15 @@ const Filter = ({ filter, onChange, onSubmit }) => {
               // onClick={handleClick}
             >
               Применить фильтр
+            </button>
+          </div>
+          <div className="col-auto">
+            <button
+              type="button"
+              className="btn btn-secondary "
+              onClick={onCancel}
+            >
+              Х
             </button>
           </div>
         </form>

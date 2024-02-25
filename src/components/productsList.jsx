@@ -1,48 +1,46 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Pagination from "./pagination";
 import { paginate } from "../utils/paginate";
-import axios from "axios";
-import { auth } from "../utils/auth";
-import { url } from "../App";
 
 const ProductsList = ({ ids }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  // const [products, setProducts] = useState([]);
+  const [pageNumbers, setPageNumbers] = useState({
+    pagesStart: 1,
+    pagesEnd: 1,
+  });
+
   const count = ids.length;
   const pageSize = 50;
-  const handlePageChange = (pageIndex) => {
-    // console.log("page: ", pageIndex);
+  const pageCount = Math.ceil(count / pageSize);
+  useEffect(() => {
+    setCurrentPage(1);
+
+    if (pageCount > 20) {
+      setPageNumbers((prev) => ({ ...prev, pagesEnd: 20 }));
+    } else setPageNumbers((prev) => ({ ...prev, pagesEnd: pageCount }));
+  }, [ids]);
+
+  const handlePageChange = (pageIndex, action = "") => {
+    if (pageIndex > pageNumbers.pagesEnd && action === "+") {
+      setPageNumbers((prev) => ({
+        pagesEnd: pageIndex,
+        pagesStart: prev.pagesStart + 1,
+      }));
+    }
+    if (pageIndex < pageNumbers.pagesStart && action === "-") {
+      setPageNumbers((prev) => ({
+        pagesEnd: prev.pagesEnd - 1,
+        pagesStart: pageIndex,
+      }));
+    }
+
     setCurrentPage(pageIndex);
   };
   let idsCrop = [];
   if (ids) {
     idsCrop = paginate(ids, currentPage, pageSize);
-    // console.log(idsCrop);
   }
-  // useEffect(() => {
-  //   axios
-  //     .post(
-  //       url,
-  //       {
-  //         action: "get_items",
-  //         params: { ids: idsCrop },
-  //         // params: { price: 17500.0 },
-  //       },
-  //       {
-  //         headers: {
-  //           "X-Auth": auth(),
-  //         },
-  //       }
-  //     )
-  //     .then((response) => {
-  //       console.log(response.data.result);
-  //       // setIds(response.data.result);
-  //       setProducts(response.data.result);
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-  // }, [idsCrop]);
+
   return (
     <div className="container">
       <table className="table table-striped table-hover">
@@ -70,6 +68,7 @@ const ProductsList = ({ ids }) => {
       <Pagination
         itemsCount={count}
         pageSize={pageSize}
+        pageNumbers={pageNumbers}
         currentPage={currentPage}
         onPageChange={handlePageChange}
       />
