@@ -7,7 +7,7 @@ import { auth } from "./utils/auth";
 import Filter from "./components/filter";
 import { set } from "lodash";
 
-export const url = "http://api.valantis.store:40000/";
+export const url = "https://api.valantis.store:41000/";
 const initialFilterState = { name: "", brand: "", price: "" };
 
 function App() {
